@@ -1,3 +1,3 @@
 @echo off
-python -m PyInstaller --onefile main.py --name "hdiff-patcher" --icon GenshinImpact.exe --uac-admin
+python -m PyInstaller --onefile main.py --name "hdiff-patcher" --icon icon-grab.exe --uac-admin
 pause
