@@ -1,23 +1,15 @@
 import os
 import subprocess
 
-def process_files(file1_path, file2_path):
-
-    with open(file1_path, "r") as file1, open(file2_path, "r") as file2:
-        contents1 = file1.read()
-        contents2 = file2.read()
-        
-    contents1 = contents1.replace("/", "\\", )
-    contents1 = contents1.replace('{"remoteName": "', "")
-    contents1 = contents1.replace('"}', "")
-
-    contents2 = contents2.replace("/", "\\")
-    contents2 = contents2.replace('{"remoteName": "', "")
-    contents2 = contents2.replace('"}', "")
-
-    with open(file1_path, "w") as file1, open(file2_path, "w") as file2:
-        file1.write(contents1)
-        file2.write(contents2)
+def fix_parsing(hdiffiles, deletefiles):
+   with open(hdiffiles, "r") as hdiff, open(deletefiles, "r") as dfiles:
+       for path, data in [
+           (hdiffiles, hdiff.read()),
+           (deletefiles, dfiles.read())
+       ]:
+           parsed = data.replace("/", "\\").replace('{"remoteName": "', "").replace('"}', "")
+           with open(path, "w") as file:
+               file.write(parsed)
 
 def apply_patch():
     with open("hdifffiles.txt", "r") as file:
@@ -28,7 +20,7 @@ def apply_patch():
 def main():
     working_dir = os.path.dirname(os.path.abspath(__file__))
 
-    process_files("hdifffiles.txt", "deletefiles.txt")
+    fix_parsing("hdifffiles.txt", "deletefiles.txt")
 
     missing_files = []
     required_files = []
