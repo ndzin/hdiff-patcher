@@ -6,5 +6,6 @@ move "dist\hdiff-patcher.exe" .
 rmdir /s /q "./dist"
 rmdir /s /q "./build"
 del "hdiff-patcher.spec"
+"C:\Program Files\WinRAR\WinRAR.exe" a "hdiff-patcher.zip" "lib\*" "hdiff-patcher.exe"
 
 pause

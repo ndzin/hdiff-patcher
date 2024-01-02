@@ -2,14 +2,13 @@ import os
 import subprocess
 
 def fix_parsing(hdiffiles, deletefiles):
-   with open(hdiffiles, "r") as hdiff, open(deletefiles, "r") as dfiles:
-       for path, data in [
-           (hdiffiles, hdiff.read()),
-           (deletefiles, dfiles.read())
-       ]:
-           parsed = data.replace("/", "\\").replace('{"remoteName": "', "").replace('"}', "")
-           with open(path, "w") as file:
-               file.write(parsed)
+    for path in [hdiffiles, deletefiles]:
+        with open(path, "r+") as file:
+            data = file.read()
+            parsed = data.replace("/", "\\").replace('{"remoteName": "', "").replace('"}', "")
+            file.seek(0)
+            file.write(parsed)
+            file.truncate()
 
 def apply_patch():
     with open("hdifffiles.txt", "r") as file:

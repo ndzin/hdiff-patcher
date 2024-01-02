@@ -1,2 +1,4 @@
 hdiff-patcher.exe
 *.zip
+*.txt
+./backup/*
