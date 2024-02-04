@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace Hdiff_Patcher
 {
     internal class Program
     {
+        public class hdifffilesRow {
+            public string remoteName {get;set;}
+        }
+        
         static void Main()
         {
             // No command output
@@ -16,8 +21,9 @@ namespace Hdiff_Patcher
 
             // Check if all files are present
             bool fileMissing = false;
-            foreach (string line in File.ReadLines(Path.Combine(workingDirForAdmin, "hdifffiles.txt")))
+            foreach (string line1 in File.ReadLines(Path.Combine(workingDirForAdmin, "hdifffiles.txt")))
             {
+                string line = JsonConvert.DeserializeObject<hdifffilesRow>(line1).remoteName;
                 string filePath = Path.Combine(workingDirForAdmin, line);
                 if (!File.Exists(filePath))
                 {
@@ -68,8 +74,9 @@ namespace Hdiff_Patcher
         {
             Console.WriteLine("All necessary files are present. Applying patch now...\n");
 
-            foreach (string line in File.ReadLines(Path.Combine(workingDirForAdmin, "hdifffiles.txt")))
+            foreach (string line1 in File.ReadLines(Path.Combine(workingDirForAdmin, "hdifffiles.txt")))
             {
+                string line = JsonConvert.DeserializeObject<hdifffilesRow>(line1).remoteName;
                 string originalFilePath = Path.Combine(workingDirForAdmin, line);
                 string patchFilePath = originalFilePath + ".hdiff";
 
@@ -103,8 +110,9 @@ namespace Hdiff_Patcher
             File.Delete(Path.Combine(workingDirForAdmin, "deletefiles.txt"));
 
             // Delete obsolete .hdiff files after patch application
-            foreach (string line in File.ReadLines(Path.Combine(workingDirForAdmin, "hdifffiles.txt")))
+            foreach (string line1 in File.ReadLines(Path.Combine(workingDirForAdmin, "hdifffiles.txt")))
             {
+                string line = JsonConvert.DeserializeObject<hdifffilesRow>(line1).remoteName;
                 File.Delete(Path.Combine(workingDirForAdmin, line + ".hdiff"));
             }
 
